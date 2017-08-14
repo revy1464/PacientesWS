@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="100" resizable="false" closable="true" collapsible="true">
+                    IPS Fime
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="50" closable="true" collapsible="true">
+                    Trabajo de grado - Jose Manuel Conde
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" size="250" header="Menu" collapsible="true" >
+                    <p:menu>
+                        <p:menuitem outcome="/adminPacientes" value="Gestionar pacientes" />
+                        <p:menuitem outcome="/fondosPension" value="Gestionar fondos de pension" />
+                        <p:menuitem outcome="/adminRiesgo" value="Gestionar administradora de riesgos" />
+                        <p:menuitem outcome="/adminEps" value="Gestionar EPS" />
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit  position="center" header="Gestion de Pacientes">
+                    <h:form id="frmMain">    
+                        <p:growl id="growl" showDetail="true" sticky="true" />
+                        <p:panelGrid columns="2" >
+                            <p:panelGrid style="margin-top:10px">
+                                <div id="perfiles">
+                                    <p:row>
+                                        <p:column colspan="2" styleClass="ui-widget-header">Administradora de riesgos laborales</p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column >
+                                            <h:outputText value="Codigo"/>
+                                            <p:inputText  id="txtCodigo" binding="#{regArlView.txtCodigo}"/>
+                                        </p:column>
+                                        <p:column >
+                                            <p:commandButton binding="#{regArlView.btnBuscar}" 
+                                                             actionListener="#{regArlView.showArl()}" 
+                                                             id="btnBuscar" update="frmMain,growl" 
+                                                             icon=" ui-icon-search" 
+                                                             title="Buscar" />
+                                            <p:commandButton binding="#{regArlView.btnRegistrar}" 
+                                                             actionListener="#{regArlView.registrar()}" 
+                                                             id="btnRegistrar" update="frmMain,growl" 
+                                                             icon=" ui-icon-plusthick" 
+                                                             title="Registrar" />
+                                            <p:commandButton binding="#{regArlView.btnActualizar}" 
+                                                             actionListener="#{regArlView.modificar()}" 
+                                                             id="btnActualizar" update="frmMain,growl" 
+                                                             icon="ui-icon-pencil" 
+                                                             title="Modificar" />
+                                            <p:commandButton binding="#{regArlView.btnEliminar}" 
+                                                             actionListener="#{regArlView.eliminar()}"
+                                                             id="btnEliminar" update="frmMain,growl" 
+                                                             icon=" ui-icon-close" 
+                                                             title="Eliminar" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <h:outputText value="Nombre"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtNombre" binding="#{regArlView.txtNombre}"/>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <h:outputText value="Direccion"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtDireccion" binding="#{regArlView.txtDireccion}"/>
+                                        </p:column>
+                                    </p:row>
+                                                                        <p:row>
+                                        <p:column>
+                                            <h:outputText value="Ciudad"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtCiudad" binding="#{regArlView.txtCiudad}"/>
+                                        </p:column>
+                                    </p:row>
+                                                                        <p:row>
+                                        <p:column>
+                                            <h:outputText value="Telefono"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtTelefono" binding="#{regArlView.txtTelefono}"/>
+                                        </p:column>
+                                    </p:row>
+                                                                        <p:row>
+                                        <p:column>
+                                            <h:outputText value="Email"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtEmail" binding="#{regArlView.txtEmail}"/>
+                                        </p:column>
+                                    </p:row>
+                                </div>
+                                
+                            </p:panelGrid>
+                            <p:panelGrid style="margin-top:10px">
+                                <p:row>
+                                    <p:column colspan="2" styleClass="ui-widget-header">Listado de Fondos</p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:dataTable  id="arls" var="arl" 
+                                                      value="#{regArlView.listaArls}" 
+                                                      selectionMode="single" 
+                                                      selection="#{regArlView.arl}" 
+                                                      rowKey="#{arl.idarl}">
+                                            <p:ajax event="rowSelect" listener="#{regArlView.showArlSelect}" update=":frmMain" />
+                                            <p:column headerText="Id">
+                                                <h:outputText value="#{arl.idarl}" />
+                                            </p:column>
+                                            <p:column headerText="Codigo">
+                                                <h:outputText value="#{arl.codigoARL}" />
+                                            </p:column>
+                                            <p:column headerText="Nombre">
+                                                <h:outputText value="#{arl.nombreArl}" />
+                                            </p:column>
+                                            <p:column headerText="Direccion">
+                                                <h:outputText value="#{arl.direccionArl}" />
+                                            </p:column>
+                                            <p:column headerText="ciudad">
+                                                <h:outputText value="#{arl.ciudadArl}" />
+                                            </p:column>
+
+                                            <p:column headerText="Telefono">
+                                                <h:outputText value="#{arl.telefonoArl}" />
+                                            </p:column>
+                                            <p:column headerText="Email">
+                                                <h:outputText value="#{arl.emailArl}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </p:panelGrid>
+                    </h:form>
+                </p:layoutUnit>
+
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>
+

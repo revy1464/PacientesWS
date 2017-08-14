@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="100" resizable="false" closable="true" collapsible="true">
+                    IPS Fime
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="50" closable="true" collapsible="true">
+                    Trabajo de grado - Jose Manuel Conde
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" size="250" header="Menu" collapsible="true" >
+                    <p:menu>
+                        <p:menuitem outcome="/adminPacientes" value="Gestionar pacientes" />
+                        <p:menuitem outcome="/fondosPension" value="Gestionar fondos de pension" />
+                        <p:menuitem outcome="/adminRiesgo" value="Gestionar administradora de riesgos" />
+                        <p:menuitem outcome="/adminEps" value="Gestionar EPS" />
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit  position="center" header="Gestion de Pacientes">
+                    <h:form id="frmMain">    
+                        <p:growl id="growl" showDetail="true" sticky="true" />
+                        <p:panelGrid columns="2" >
+                            <p:panelGrid style="margin-top:10px">
+                                <div id="perfiles">
+                                    <p:row>
+                                        <p:column colspan="2" styleClass="ui-widget-header">Empresas prestadoras de salud (EPS)</p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column >
+                                            <h:outputText value="Codigo"/>
+                                            <p:inputText  id="txtCodigo" binding="#{regEpsView.txtCodigo}"/>
+                                        </p:column>
+                                        <p:column >
+                                            <p:commandButton binding="#{regEpsView.btnBuscar}" 
+                                                             actionListener="#{regEpsView.showEps()}" 
+                                                             id="btnBuscar" update="frmMain,growl" 
+                                                             icon=" ui-icon-search" 
+                                                             title="Buscar" />
+                                            <p:commandButton binding="#{regEpsView.btnRegistrar}" 
+                                                             actionListener="#{regEpsView.registrar()}" 
+                                                             id="btnRegistrar" update="frmMain,growl" 
+                                                             icon=" ui-icon-plusthick" 
+                                                             title="Registrar" />
+                                            <p:commandButton binding="#{regEpsView.btnActualizar}" 
+                                                             actionListener="#{regEpsView.modificar()}" 
+                                                             id="btnActualizar" update="frmMain,growl" 
+                                                             icon="ui-icon-pencil" 
+                                                             title="Modificar" />
+                                            <p:commandButton binding="#{regEpsView.btnEliminar}" 
+                                                             actionListener="#{regEpsView.eliminar()}"
+                                                             id="btnEliminar" update="frmMain,growl" 
+                                                             icon=" ui-icon-close" 
+                                                             title="Eliminar" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <h:outputText value="Nombre"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtNombre" binding="#{regEpsView.txtNombre}"/>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <h:outputText value="Direccion"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtDireccion" binding="#{regEpsView.txtDireccion}"/>
+                                        </p:column>
+                                    </p:row>
+                                                                        <p:row>
+                                        <p:column>
+                                            <h:outputText value="Ciudad"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtCiudad" binding="#{regEpsView.txtCiudad}"/>
+                                        </p:column>
+                                    </p:row>
+                                                                        <p:row>
+                                        <p:column>
+                                            <h:outputText value="Telefono"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtTelefono" binding="#{regEpsView.txtTelefono}"/>
+                                        </p:column>
+                                    </p:row>
+                                                                        <p:row>
+                                        <p:column>
+                                            <h:outputText value="Email"/>
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText  id="txtEmail" binding="#{regEpsView.txtEmail}"/>
+                                        </p:column>
+                                    </p:row>
+                                </div>
+                                
+                            </p:panelGrid>
+                            <p:panelGrid style="margin-top:10px">
+                                <p:row>
+                                    <p:column colspan="2" styleClass="ui-widget-header">Listado de Fondos</p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:dataTable  id="eps_s" var="eps" 
+                                                      value="#{regEpsView.listaEpss}" 
+                                                      selectionMode="single" 
+                                                      selection="#{regEpsView.eps}" 
+                                                      rowKey="#{eps.idEps}">
+                                            <p:ajax event="rowSelect" listener="#{regEpsView.showEpsSelect}" update=":frmMain" />
+                                            <p:column headerText="Id">
+                                                <h:outputText value="#{eps.idEps}" />
+                                            </p:column>
+                                            <p:column headerText="Codigo">
+                                                <h:outputText value="#{eps.codigoEPS}" />
+                                            </p:column>
+                                            <p:column headerText="Nombre">
+                                                <h:outputText value="#{eps.nombreEPS}" />
+                                            </p:column>
+                                            <p:column headerText="Direccion">
+                                                <h:outputText value="#{eps.direccionEPS}" />
+                                            </p:column>
+                                            <p:column headerText="ciudad">
+                                                <h:outputText value="#{eps.ciudadEPS}" />
+                                            </p:column>
+
+                                            <p:column headerText="Telefono">
+                                                <h:outputText value="#{eps.telefonoEPS}" />
+                                            </p:column>
+                                            <p:column headerText="Email">
+                                                <h:outputText value="#{eps.emailEPS }" />
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+                        </p:panelGrid>
+                    </h:form>
+                </p:layoutUnit>
+
+
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>
+
